@@ -1,0 +1,41 @@
+body {
+  background-color: blanchedalmond;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  margin: 0; 
+}
+.container {
+  text-align: center; 
+}
+
+.box {
+  border: 10px groove darkolivegreen
+}
+
+.rotate {
+  animation: rotate 1s linear infinite; 
+}
+
+@keyframes rotate {
+  from {
+      transform: rotate(0deg); 
+  }
+  to {
+      transform: rotate(360deg); 
+  }
+}
+
+.dongle-regular {
+  font-family: "Dongle", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+h1, p, h2, button {
+  /* 폰트 클래스 추가 */
+  font-family: "Dongle", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
