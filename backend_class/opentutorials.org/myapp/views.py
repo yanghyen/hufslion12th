@@ -19,6 +19,9 @@ def HTMLTemplate(articleTag):
           {ol}
       </ul>
       {articleTag}
+      <ul>
+        <li><a href="/create/">create</a></li>
+      </ul>
   </body>
   </html>
   '''
@@ -36,9 +39,16 @@ def read(request, id):
   for topic in topics:
     if topic['id'] == int(id):
       article = f'<h2>{topic["title"]}</h2>{topic["body"]}'
-  return HttpResponse(HttpResponse(article))
+  return HttpResponse(HTMLTemplate(article))
 
 def create(request):
-  return HttpResponse('Create')
+  article = '''
+      <form action="/create/">
+          <p><input type="text" name="title" placeholder="title"></p>
+          <p><textarea name="body" placeholder="body"></textarea></p>
+          <p><input type="submit"></p> 
+      </form>
+  '''
+  return HttpResponse(HTMLTemplate(article))
 
 
