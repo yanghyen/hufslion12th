@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Post, Comment
+from accounts.models import User
 
 # 기본 serializer
 class PostBaseSerializer(serializers.Serializer):
@@ -14,7 +15,7 @@ class PostBaseSerializer(serializers.Serializer):
         post = Post.objects.create(
             content = validated_data['content'],
             view_count = validated_data['view_count'],
-            writer_id = validated_data['writer']
+            writer = User.objects.get(id = validated_data['writer']),
         )
         return post
         # return Post.objects.create(validated_data)
