@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>리액트 1분만에 추가해보기!</h1>
+  <p>단 1분만에!</p>
+
+  <div id="root"></div>
+  
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+	<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+   
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  
+  <script type="text/babel">
+    const el = React.createElement; // 리액트 사용 시작
+
+    // class helloButton extends React.Component {
+    //   constructor(props) {
+    //     super(props);
+
+    //     this.state = { liked:false };
+    //   }
+
+    //   render() {
+    //     if(this.state.liked) {
+    //       return 'Hello World';
+    //     }
+    //     return (
+    //       <button onClick={() => this.setState({ liked: true })}>Hello</button>
+    //     )
+    //   }
+    // }
+
+    function HelloButton(props) {
+      const [text, setText] = React.useState('Hello');
+
+      function handleClickButton() {
+        setText('Hello World');
+      }
+      return (
+        <button onClick={handleClickButton}>{text}</button>
+      )
+    }
+
+    const app = (
+      <div>
+        <h1>hello React!</h1>
+        <HelloButton />
+        <HelloButton />
+        <HelloButton />
+        <HelloButton />
+        <HelloButton />
+      </div>
+    )
+
+    const domContainer = document.querySelector('#root');
+    const root = ReactDOM.createRoot(domContainer);
+    root.render(app, domContainer);
+  </script>
+</body>
+</html>
