@@ -2,6 +2,7 @@ package com.likelion.lionlib.controller;
 
 import com.likelion.lionlib.dto.LoginRequest;
 import com.likelion.lionlib.dto.SignupRequest;
+import com.likelion.lionlib.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
