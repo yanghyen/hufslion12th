@@ -7,6 +7,7 @@ import com.likelion.lionlib.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,15 +66,6 @@ public class LibraryController {
         return ResponseEntity.noContent().build();
     }
 
-    // 도서 대출 등록
-    @PostMapping("/loans")
-    public ResponseEntity<LoanResponse> addLoan(@RequestBody LoanRequest loanRequest) {
-        log.info("Request POST a loan: {}", loanRequest);
-        LoanResponse savedLoan = loanService.addLoan(loanRequest);
-        log.info("Response POST a loan: {}", savedLoan);
-        return ResponseEntity.ok(savedLoan);
-    }
-
     // 대출 정보 조회
     @GetMapping("/loans/{loanId}")
     public ResponseEntity<LoanResponse> getLoan(@PathVariable Long loanId) {
@@ -92,20 +84,24 @@ public class LibraryController {
         return ResponseEntity.ok(updatedLoan);
     }
 
-    // 사용자의 대출 목록 조회
-    @GetMapping("/members/{memberId}/loans")
-    public ResponseEntity<List<LoanResponse>> getLoansByMemberId(@PathVariable Long memberId) {
-        log.info("Request GET loans for member with ID: {}", memberId);
-        List<LoanResponse> loans = loanService.getLoansByMemberId(memberId);
-        log.info("Response GET loans for member: {}", loans);
-        return ResponseEntity.ok(loans);
+    // 도서 대출 등록
+    @PostMapping("/loans")
+    public ResponseEntity<LoanResponse> addLoan(@AuthenticationPrincipal CustomUserDetails authentication,
+                                                @RequestBody LoanRequest loanRequest) {
+        log.info("Request POST a loan: {}", loanRequest);
+        log.info("Request POST a loan memberId: {}", authentication.getId());
+        LoanResponse savedLoan = loanService.addLoan(authentication, loanRequest);
+        log.info("Response POST a loan: {}", savedLoan);
+        return ResponseEntity.ok(savedLoan);
     }
 
     // 도서 예약 등록
     @PostMapping("/reservations")
-    public ResponseEntity<ReservationResponse> addReservation(@RequestBody ReservationRequest reservationRequest) {
+    public ResponseEntity<ReservationResponse> addReservation(@AuthenticationPrincipal CustomUserDetails authentication,
+                                                              @RequestBody ReservationRequest reservationRequest) {
         log.info("Request POST a reservation: {}", reservationRequest);
-        ReservationResponse savedReservation = reservationService.addReservation(reservationRequest);
+        log.info("Request POST a reservation memberId: {}", authentication.getId());
+        ReservationResponse savedReservation = reservationService.addReservation(authentication, reservationRequest);
         log.info("Response POST a reservation: {}", savedReservation);
         return ResponseEntity.ok(savedReservation);
     }
@@ -128,22 +124,15 @@ public class LibraryController {
         return ResponseEntity.noContent().build();
     }
 
-    // 사용자 예약 목록 조회
-    @GetMapping("/members/{memberId}/reservations")
-    public ResponseEntity<List<ReservationResponse>> getReservationsByMemberId(@PathVariable Long memberId) {
-        log.info("Request GET reservations for member with ID: {}", memberId);
-        List<ReservationResponse> reservations = reservationService.getReservationsByMemberId(memberId);
-        log.info("Response GET reservations for member: {}", reservations);
-        return ResponseEntity.ok(reservations);
-    }
-
     // 도서 예약 수 현황 조회
     @GetMapping("books/{bookId}/reservations")
-    public ResponseEntity<Long> getReservationCountByBookId(@PathVariable Long bookId) {
+    public ResponseEntity<ReservationCountResponse> getReservationCountByBookId(@PathVariable Long bookId) {
         log.info("Request GET reservation count for book with ID: {}", bookId);
         Long reservationCount = reservationService.getReservationCountByBookId(bookId);
         log.info("Response GET reservation count for book with ID {}: {}", bookId, reservationCount);
-        return ResponseEntity.ok(reservationCount);
+
+        ReservationCountResponse response = new ReservationCountResponse(reservationCount);
+        return ResponseEntity.ok(response);
     }
 }
 

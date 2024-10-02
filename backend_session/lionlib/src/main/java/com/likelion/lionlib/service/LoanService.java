@@ -4,6 +4,7 @@ import com.likelion.lionlib.domain.Book;
 import com.likelion.lionlib.domain.Loan;
 import com.likelion.lionlib.domain.LoanStatus;
 import com.likelion.lionlib.domain.Member;
+import com.likelion.lionlib.dto.CustomUserDetails;
 import com.likelion.lionlib.dto.LoanRequest;
 import com.likelion.lionlib.dto.LoanResponse;
 import com.likelion.lionlib.repository.LoanRepository;
@@ -20,8 +21,8 @@ public class LoanService {
 
     private final GlobalService globalService;
 
-    public LoanResponse addLoan(LoanRequest loanRequest) {
-        Member member = globalService.findMemberById(loanRequest.getMemberId());
+    public LoanResponse addLoan(CustomUserDetails customUserDetails, LoanRequest loanRequest) {
+        Member member = globalService.findMemberById(customUserDetails.getId());
         Book book = globalService.findBookById(loanRequest.getBookId());
         Loan savedLoan = Loan.builder()
                 .member(member)
