@@ -5,6 +5,7 @@ import com.likelion.lionlib.domain.Profile;
 import com.likelion.lionlib.domain.Role;
 import com.likelion.lionlib.dto.MemberResponse;
 import com.likelion.lionlib.dto.ProfileRequest;
+import com.likelion.lionlib.exception.MemberNotFoundException;
 import com.likelion.lionlib.repository.MemberRepository;
 import com.likelion.lionlib.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +52,7 @@ public class MemberService {
         Member member = globalService.findMemberById(memberId);
 
         Profile profile = profileRepository.findByMember(member)
-                .orElseThrow(() -> new RuntimeException("Profile not found"));
+                .orElseThrow(() -> new MemberNotFoundException(memberId));
 
         member.updateName(profileRequest.getName());
 

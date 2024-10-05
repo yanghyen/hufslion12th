@@ -6,6 +6,7 @@ import com.likelion.lionlib.domain.Member;
 import com.likelion.lionlib.dto.CustomUserDetails;
 import com.likelion.lionlib.dto.ReservationRequest;
 import com.likelion.lionlib.dto.ReservationResponse;
+import com.likelion.lionlib.exception.ReservationNotFoundException;
 import com.likelion.lionlib.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,7 @@ public class ReservationService {
 
     private Reservation findReservationById(Long reservationId) {
         return reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new RuntimeException("Reservation not found"));
+                .orElseThrow(() -> new ReservationNotFoundException(reservationId));
     }
 
     private List<Reservation> findReservationsByMemberId(Long memberId) {
